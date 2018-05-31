@@ -1,0 +1,40 @@
+game {
+    background:black;
+    border-top:6px solid #2121de;
+
+}
+
+.wall {
+    width: 50px;
+    height: 50px;
+    background-image: url('../assests/wall.png');
+    display: inline-block;
+}
+.coin {
+    width: 50px;
+    height: 50px;
+    background-image: url('../assests/coin.png');
+    display: inline-block;
+}
+.ground {
+    width: 50px;
+    height: 50px;
+    background-image: url('../assests/bg.png');
+    display: inline-block;
+}
+.ghost {
+    width: 50px;
+    height: 50px;
+    background-image: url('../assests/ghost1.png');
+    display: inline-block;
+}
+.pacman {
+    width: 50px;
+    height: 50px;
+    background-image: url('../assests/pacman.png');
+    display: inline-block;
+}
+
+div {
+    line-height: 0px;
+}
