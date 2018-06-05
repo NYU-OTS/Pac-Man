@@ -1,9 +1,11 @@
 import { NavigateAction } from '../actions';
-import { KEY_PRESS } from '../constants/index';
+import { KEY_PRESS, START_GAME, Status } from '../constants/index';
 import { IStoreState } from '../types/index';
 
 export default function gridUpdation(state: IStoreState, action: NavigateAction): IStoreState {
   switch (action.type) {
+    case START_GAME:
+      return { ...state, status: Status.InProgress};
     case KEY_PRESS:
       global.console.log(action.keyPressCode);
       global.console.log(state.grid);
