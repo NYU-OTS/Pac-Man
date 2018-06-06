@@ -51,11 +51,6 @@ function configureStore(){
 }
 const store = configureStore()
 
-// ReactDOM.render(
-//   <App />,
-//   document.getElementById('root') as HTMLElement
-// );
-
 ReactDOM.render(
   <Provider store = {store}>
     { <Game /> }

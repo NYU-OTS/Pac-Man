@@ -50,7 +50,7 @@ class Game extends React.Component<IProps, IStoreState> {
                 <div className="welcome">
                     <div className="title"><p>GAME OVER</p></div>
                     <div className="content">
-                        <p>You scored: {this.props.score} points</p>
+                        <p>You scored: {this.props.score}/256 points</p>
                         <p onClick={this.props.clickToStart}>Click here to start a new game.</p>
                     </div>
                 </div>

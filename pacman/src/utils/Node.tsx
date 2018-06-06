@@ -1,3 +1,12 @@
+export interface INodeConstructor {
+    id: number;
+    x: number;
+    y: number,
+    value: number,
+    isWalkable: boolean,
+}
+
+
 export class Node {
 
     // Parent Node
@@ -15,14 +24,16 @@ export class Node {
     private h: number;
     private isOnCloseList: boolean;
     private isOnOpenList: boolean;
+    private isWalkable: boolean;
     
 
-    constructor(x: number, y: number, id: number, value: number) {
+    constructor( params: INodeConstructor) {
         // Setting the 2D grid properties
-        this.x = x;
-        this.y = y;
-        this.id = id;
-        this.value = value;
+        this.x = params.x;
+        this.y = params.y;
+        this.id = params.id;
+        this.value = params.value;
+        this.isWalkable = params.isWalkable;
 
         // Setting the properties needed for A star
         this.f = 0;
@@ -43,6 +54,8 @@ export class Node {
     public getH(): number { return this.h; }
     public getIsOnClosedList(): boolean { return this.isOnCloseList; }
     public getIsOnOpenList(): boolean { return this.isOnOpenList; }
+    public getIsWalkable(): boolean { return this.isWalkable; }
+    public getParent(): (Node | undefined) { return this.parent; }
 
     // Setter Functions
     public setValue(value: number): void { this.value = value;}
@@ -51,6 +64,8 @@ export class Node {
     public setH(h: number): void { this.h = h;}
     public setIsOnCloseList(isOnCloseList: boolean): void { this.isOnCloseList = isOnCloseList;}
     public setIsOnOpenList(isOnOpenList: boolean): void { this.isOnOpenList = isOnOpenList;}
+    public setIsWalkable(isWalkable: boolean): void { this.isWalkable = isWalkable;}
+    public setParent(parent: (Node| undefined)): void { this.parent = parent; }
 
 
 }
