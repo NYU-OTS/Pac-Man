@@ -5,9 +5,15 @@ game {
 }
 
 @font-face {
-    font-family: pacman;
+    font-family: pacman-good;
     src: url('../assests/PacFont\ Good.ttf');
 }
+
+@font-face {
+    font-family: pacman;
+    src: url('../assests/PacFont.ttf');
+}
+
 
 .welcome {
     height: max-content;
@@ -18,13 +24,13 @@ game {
     color: yellow;
     text-align: center;
     font-size: 5em;
-    font-family: pacman;
+    font-family: pacman-good;
 }
 
 .welcome .content {
     color: yellow;
     text-align: center;
-    font-size: 1em;
+    font-size: 2em;
 }
 
 .wall {
