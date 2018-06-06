@@ -6,6 +6,7 @@ import { IStoreState } from '../types/index';
 export function mapStateToProps(state: IStoreState) {
   return {
     grid: state.grid,
+    score: state.score,
     status: state.status,
   };
 }

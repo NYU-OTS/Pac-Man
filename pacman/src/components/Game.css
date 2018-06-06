@@ -1,7 +1,13 @@
-game {
-    border-top:6px solid #2121de;
-    justify-content: center;
-    align-items: center;
+.game {
+    margin: auto;
+    padding-left: 17%;
+}
+
+.score {
+    height: max-content;
+    color: yellow;
+    text-align: center;
+    font-size: 1em;
 }
 
 @font-face {

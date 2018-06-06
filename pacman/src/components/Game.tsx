@@ -7,6 +7,7 @@ import './Game.css';
 export interface IProps extends React.Props<any> {
     grid: number[][];
     status: Status;
+    score: number;
     handleOnKeyPress: (event: KeyboardEvent) => any;
     clickToStart: () => any;
 }
@@ -30,10 +31,28 @@ class Game extends React.Component<IProps, IStoreState> {
                 </div>
             );
         }
+        else if (this.props.status === Status.InProgress) {
+            return (
+                <div>
+                    <div className="score">
+                        <p>Score: {this.props.score}  </p>
+                    </div>
+                    <div className="game">
+
+                        {drawGrid(this.props.grid)}
+
+                    </div>
+                </div>
+            );
+        }
         else {
             return (
-                <div className="game">
-                    {drawGrid(this.props.grid)}
+                <div className="welcome">
+                    <div className="title"><p>GAME OVER</p></div>
+                    <div className="content">
+                        <p>You scored: {this.props.score} points</p>
+                        <p onClick={this.props.clickToStart}>Click here to start a new game.</p>
+                    </div>
                 </div>
             );
         }
