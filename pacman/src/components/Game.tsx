@@ -78,7 +78,7 @@ function drawGrid(grid: number[][]) {
                 return (
                     <div className="ground" key={j} />
                 );
-            } else if (grid[i][j] === 4) {
+            } else if (grid[i][j] === 4 || grid[i][j] === 8 || grid[i][j] === 12 || grid[i][j] === 16 ) {
                 return (
                     <div className="ghost" key={j} />
                 );

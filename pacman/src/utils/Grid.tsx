@@ -15,7 +15,7 @@ export class Grid {
         this.numberGrid = numberGrid;
 
         // Creating a Node Grid
-        this.nodeGrid = this.generateNodeGrid(this.numberGrid, this.gridHeight, this.gridWidth);
+        this.nodeGrid = this.generateNodeGrid(this.numberGrid, this.gridWidth, this.gridHeight);
     }
 
     public getNodeAt(x: number, y: number): Node {
@@ -36,10 +36,23 @@ export class Grid {
             for (let x = (currentXPos - 1); x < (currentXPos + 2); x++) {
                 if (this.isOnTheGrid(x, y)) {
                     if (this.isWalkableAt(x, y)) {
-                        if (x === currentXPos && y === currentYPos) {
-                            continue;
-                        } else {
-                            surroundingNodes.push(this.getNodeAt(x, y));
+                        if(y === currentYPos)
+                        {
+                            if (x === currentXPos && y === currentYPos) {
+                                continue;
+                            }
+                            else{
+                                surroundingNodes.push(this.getNodeAt(x, y));
+                            }
+                        }
+                        else if (x === currentXPos)
+                        {
+                            if (x === currentXPos && y === currentYPos) {
+                                continue;
+                            }
+                            else{
+                                surroundingNodes.push(this.getNodeAt(x, y));
+                            }
                         }
                     }
                     else {
@@ -77,10 +90,9 @@ export class Grid {
     private generateNodeGrid(numberGrid: number[][], width: number, height: number) {
 
         const nodeGrid: Node[][] = [];
-        const row: Node[] = [];
+        let row: Node[] = [];
         let Id: number = 0;
-
-
+                
         for (let Y = 0; Y < height; Y++) {
             nodeGrid[Y] = [];
 
@@ -92,6 +104,7 @@ export class Grid {
                 else {
                     walkable = false;
                 }
+                
                 const params: INodeConstructor = {
                     id: Id,
                     isWalkable: walkable,
@@ -99,11 +112,11 @@ export class Grid {
                     x: X,
                     y: Y,
                 };
-                row[X] = new Node(params);
-
+                row.push(new Node(params));
                 Id++;
             }
             nodeGrid[Y] = row;
+            row = [];
         }
 
         return nodeGrid;
