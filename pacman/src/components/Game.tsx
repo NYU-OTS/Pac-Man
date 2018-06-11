@@ -1,22 +1,25 @@
 import * as React from 'react';
-import { Status } from '../constants';
-import { IStoreState } from '../types/index';
+import { GridTile, Status } from '../constants';
 import './Game.css';
 
 // Game Properties
-export interface IProps extends React.Props<any> {
+interface IProps {
     grid: number[][];
     status: Status;
     score: number;
-    handleOnKeyPress: (event: KeyboardEvent) => any;
-    clickToStart: () => any;
+
 }
 
-class Game extends React.Component<IProps, IStoreState> {
+interface IAction {
+    handleOnKeyPress: (event: KeyboardEvent) => void;
+    clickToStart: () => void;
+}
 
-    constructor(props: IProps) {
-        super(props);
-    }
+class Game extends React.Component<IProps & IAction> {
+
+    // constructor(props: IProps) {
+    //     super(props);
+    // }
 
     public componentDidMount() {
         window.addEventListener('keydown', event => this.props.handleOnKeyPress(event));
@@ -66,23 +69,23 @@ export default Game;
 function drawGrid(grid: number[][]) {
     const rows = grid.map((item: number[], i: number) => {
         const entry = item.map((element: number, j: number) => {
-            if (grid[i][j] === 1) {
+            if (grid[i][j] === GridTile.Wall) {
                 return (
                     <div className="wall" key={j} />
                 );
-            } else if (grid[i][j] === 2) {
+            } else if (grid[i][j] === GridTile.Coin) {
                 return (
                     <div className="coin" key={j} />
                 );
-            } else if (grid[i][j] === 3) {
+            } else if (grid[i][j] === GridTile.Ground) {
                 return (
                     <div className="ground" key={j} />
                 );
-            } else if (grid[i][j] === 4 || grid[i][j] === 8 || grid[i][j] === 12 || grid[i][j] === 16 ) {
+            } else if (grid[i][j] === GridTile.Ghost1 || grid[i][j] === GridTile.Ghost2 || grid[i][j] === GridTile.Ghost3 || grid[i][j] === GridTile.Ghost4) {
                 return (
                     <div className="ghost" key={j} />
                 );
-            } else if (grid[i][j] === 5) {
+            } else if (grid[i][j] === GridTile.Pacman) {
                 return (
                     <div className="pacman" key={j} />
                 );

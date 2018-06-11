@@ -1,52 +1,10 @@
 import { NavigateAction } from '../actions';
-import { KEY_PRESS, START_GAME, Status } from '../constants/index';
+import { GridTile, initialState, KEY_PRESS, START_GAME, Status } from '../constants/index';
 import { IStoreState } from '../types/index';
 import { Astar } from '../utils/Astar';
 import { Grid } from '../utils/Grid';
 
 export default function gridUpdation(state: IStoreState, action: NavigateAction): IStoreState {
-
-  const initialState = {
-
-    ghost1Previous: 3,
-    ghost1X: 6,
-    ghost1Y: 4,
-    ghost2Previous: 3,
-    ghost2X: 18,
-    ghost2Y: 4,
-    ghost3Previous: 3,
-    ghost3X: 6,
-    ghost3Y: 14,
-    ghost4Previous: 3,
-    ghost4X: 18,
-    ghost4Y: 14,
-    grid: [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
-      [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1],
-      [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
-      [1, 2, 2, 2, 1, 1, 4, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 8, 1, 1, 2, 2, 2, 1],
-      [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
-      [1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1],
-      [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
-      [1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1],
-      [1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 5, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1],
-      [1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1],
-      [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
-      [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1],
-      [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
-      [1, 2, 2, 2, 1, 1, 12, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 16, 1, 1, 2, 2, 2, 1],
-      [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
-      [1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1],
-      [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ],
-    pacmanX: 12,
-    pacmanY: 9,
-    score: 0,
-    status: Status.YetToStart,
-
-  }
 
   switch (action.type) {
     case START_GAME:
@@ -77,8 +35,6 @@ export default function gridUpdation(state: IStoreState, action: NavigateAction)
       }
 
     case KEY_PRESS:
-      global.console.log(action.keyPressCode);
-      global.console.log(state.grid);
       const modifiedState = generateGrid(state, action.keyPressCode);
       return {
         ...state,
@@ -126,10 +82,10 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
   let tempStatus = state.status;
 
   if (keyPressCode === 37) { // PACMAN MOVE LEFT
-    if (tempGrid[tempPacmanY][tempPacmanX - 1] === 4 ||
-      tempGrid[tempPacmanY][tempPacmanX - 1] === 8 ||
-      tempGrid[tempPacmanY][tempPacmanX - 1] === 12 ||
-      tempGrid[tempPacmanY][tempPacmanX - 1] === 16) {
+    if (tempGrid[tempPacmanY][tempPacmanX - 1] === GridTile.Ghost1 ||
+      tempGrid[tempPacmanY][tempPacmanX - 1] === GridTile.Ghost2 ||
+      tempGrid[tempPacmanY][tempPacmanX - 1] === GridTile.Ghost3 ||
+      tempGrid[tempPacmanY][tempPacmanX - 1] === GridTile.Ghost4) {
       tempStatus = Status.Over;
       return {
         g1Previous: ghost1Previous,
@@ -151,19 +107,19 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
         y: tempPacmanY,
       };
     }
-    else if (tempGrid[tempPacmanY][tempPacmanX - 1] !== 1) {
-      if (tempGrid[tempPacmanY][tempPacmanX - 1] === 2) {
+    else if (tempGrid[tempPacmanY][tempPacmanX - 1] !== GridTile.Wall) {
+      if (tempGrid[tempPacmanY][tempPacmanX - 1] === GridTile.Coin) {
         tempScore = tempScore + 1;
       }
-      tempGrid[tempPacmanY][tempPacmanX] = 3;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Ground;
       tempPacmanX = tempPacmanX - 1;
-      tempGrid[tempPacmanY][tempPacmanX] = 5;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Pacman;
     }
   } else if (keyPressCode === 38) { // PACMAN MOVE UP
-    if (tempGrid[tempPacmanY - 1][tempPacmanX] === 4 ||
-      tempGrid[tempPacmanY - 1][tempPacmanX] === 8 ||
-      tempGrid[tempPacmanY - 1][tempPacmanX] === 12 ||
-      tempGrid[tempPacmanY - 1][tempPacmanX] === 16) {
+    if (tempGrid[tempPacmanY - 1][tempPacmanX] === GridTile.Ghost1 ||
+      tempGrid[tempPacmanY - 1][tempPacmanX] === GridTile.Ghost2 ||
+      tempGrid[tempPacmanY - 1][tempPacmanX] === GridTile.Ghost3 ||
+      tempGrid[tempPacmanY - 1][tempPacmanX] === GridTile.Ghost4) {
       tempStatus = Status.Over;
       return {
         g1Previous: ghost1Previous,
@@ -185,19 +141,19 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
         y: tempPacmanY,
       };
     }
-    else if (tempGrid[tempPacmanY - 1][tempPacmanX] !== 1) {
-      if (tempGrid[tempPacmanY - 1][tempPacmanX] === 2) {
+    else if (tempGrid[tempPacmanY - 1][tempPacmanX] !== GridTile.Wall) {
+      if (tempGrid[tempPacmanY - 1][tempPacmanX] === GridTile.Coin) {
         tempScore = tempScore + 1;
       }
-      tempGrid[tempPacmanY][tempPacmanX] = 3;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Ground;
       tempPacmanY = tempPacmanY - 1;
-      tempGrid[tempPacmanY][tempPacmanX] = 5;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Pacman;
     }
   } else if (keyPressCode === 39) { // PACMAN MOVE RIGHT
-    if (tempGrid[tempPacmanY][tempPacmanX + 1] === 4 ||
-      tempGrid[tempPacmanY][tempPacmanX + 1] === 8 ||
-      tempGrid[tempPacmanY][tempPacmanX + 1] === 12 ||
-      tempGrid[tempPacmanY][tempPacmanX + 1] === 16) {
+    if (tempGrid[tempPacmanY][tempPacmanX + 1] === GridTile.Ghost1 ||
+      tempGrid[tempPacmanY][tempPacmanX + 1] === GridTile.Ghost2 ||
+      tempGrid[tempPacmanY][tempPacmanX + 1] === GridTile.Ghost3 ||
+      tempGrid[tempPacmanY][tempPacmanX + 1] === GridTile.Ghost4) {
       tempStatus = Status.Over;
       return {
         g1Previous: ghost1Previous,
@@ -219,19 +175,19 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
         y: tempPacmanY,
       };
     }
-    else if (tempGrid[tempPacmanY][tempPacmanX + 1] !== 1) {
-      if (tempGrid[tempPacmanY][tempPacmanX + 1] === 2) {
+    else if (tempGrid[tempPacmanY][tempPacmanX + 1] !== GridTile.Wall) {
+      if (tempGrid[tempPacmanY][tempPacmanX + 1] === GridTile.Coin) {
         tempScore = tempScore + 1;
       }
-      tempGrid[tempPacmanY][tempPacmanX] = 3;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Ground;
       tempPacmanX = tempPacmanX + 1;
-      tempGrid[tempPacmanY][tempPacmanX] = 5;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Pacman;
     }
   } else if (keyPressCode === 40) { // PACMAN MOVE DOWN
-    if (tempGrid[tempPacmanY + 1][tempPacmanX] === 4 ||
-      tempGrid[tempPacmanY + 1][tempPacmanX] === 8 ||
-      tempGrid[tempPacmanY + 1][tempPacmanX] === 12 ||
-      tempGrid[tempPacmanY + 1][tempPacmanX] === 16) {
+    if (tempGrid[tempPacmanY + 1][tempPacmanX] === GridTile.Ghost1 ||
+      tempGrid[tempPacmanY + 1][tempPacmanX] === GridTile.Ghost2 ||
+      tempGrid[tempPacmanY + 1][tempPacmanX] === GridTile.Ghost3 ||
+      tempGrid[tempPacmanY + 1][tempPacmanX] === GridTile.Ghost4) {
       tempStatus = Status.Over;
       return {
         g1Previous: ghost1Previous,
@@ -253,13 +209,13 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
         y: tempPacmanY,
       };
     }
-    else if (tempGrid[tempPacmanY + 1][tempPacmanX] !== 1) {
-      if (tempGrid[tempPacmanY + 1][tempPacmanX] === 2) {
+    else if (tempGrid[tempPacmanY + 1][tempPacmanX] !== GridTile.Wall) {
+      if (tempGrid[tempPacmanY + 1][tempPacmanX] === GridTile.Coin) {
         tempScore = tempScore + 1;
       }
-      tempGrid[tempPacmanY][tempPacmanX] = 3;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Ground;
       tempPacmanY = tempPacmanY + 1;
-      tempGrid[tempPacmanY][tempPacmanX] = 5;
+      tempGrid[tempPacmanY][tempPacmanX] = GridTile.Pacman;
     }
   }
 
@@ -269,7 +225,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
     const pathG1 = astar.findPath([ghost1X, ghost1Y], [tempPacmanX, tempPacmanY]);
     if (!(pathG1 === undefined || pathG1.length === 0)) {
       const futureGhost1 = pathG1[1];
-      if (tempGrid[futureGhost1[1]][futureGhost1[0]] === 5) {
+      if (tempGrid[futureGhost1[1]][futureGhost1[0]] === GridTile.Pacman) {
         tempStatus = Status.Over;
         return {
           g1Previous: ghost1Previous,
@@ -293,7 +249,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
       } else {
         tempGrid[ghost1Y][ghost1X] = setPrevious(state, tempGrid, ghost1Previous, 1);
         ghost1Previous = tempGrid[futureGhost1[1]][futureGhost1[0]];
-        tempGrid[futureGhost1[1]][futureGhost1[0]] = 4;
+        tempGrid[futureGhost1[1]][futureGhost1[0]] = GridTile.Ghost1;
         ghost1X = futureGhost1[0];
         ghost1Y = futureGhost1[1];
       }
@@ -303,7 +259,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
     const pathG2 = astar.findPath([ghost2X, ghost2Y], [tempPacmanX, tempPacmanY]);
     if (!(pathG2 === undefined || pathG2.length === 0)) {
       const futureGhost2 = pathG2[1];
-      if (tempGrid[futureGhost2[1]][futureGhost2[0]] === 5) {
+      if (tempGrid[futureGhost2[1]][futureGhost2[0]] === GridTile.Pacman) {
         tempStatus = Status.Over;
         return {
           g1Previous: ghost1Previous,
@@ -327,7 +283,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
       } else {
         tempGrid[ghost2Y][ghost2X] = setPrevious(state, tempGrid, ghost2Previous, 2);
         ghost2Previous = tempGrid[futureGhost2[1]][futureGhost2[0]];
-        tempGrid[futureGhost2[1]][futureGhost2[0]] = 8;
+        tempGrid[futureGhost2[1]][futureGhost2[0]] = GridTile.Ghost2;
         ghost2X = futureGhost2[0];
         ghost2Y = futureGhost2[1];
       }
@@ -337,7 +293,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
     const pathG3 = astar.findPath([ghost3X, ghost3Y], [tempPacmanX, tempPacmanY]);
     if (!(pathG3 === undefined || pathG3.length === 0)) {
       const futureGhost3 = pathG3[1];
-      if (tempGrid[futureGhost3[1]][futureGhost3[0]] === 5) {
+      if (tempGrid[futureGhost3[1]][futureGhost3[0]] === GridTile.Pacman) {
         tempStatus = Status.Over;
         return {
           g1Previous: ghost1Previous,
@@ -361,7 +317,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
       } else {
         tempGrid[ghost3Y][ghost3X] = setPrevious(state, tempGrid, ghost3Previous, 3);
         ghost3Previous = tempGrid[futureGhost3[1]][futureGhost3[0]];
-        tempGrid[futureGhost3[1]][futureGhost3[0]] = 12;
+        tempGrid[futureGhost3[1]][futureGhost3[0]] = GridTile.Ghost3;
         ghost3X = futureGhost3[0];
         ghost3Y = futureGhost3[1];
       }
@@ -371,7 +327,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
     const pathG4 = astar.findPath([ghost4X, ghost4Y], [tempPacmanX, tempPacmanY]);
     if (!(pathG4 === undefined || pathG4.length === 0)) {
       const futureGhost4 = pathG4[1];
-      if (tempGrid[futureGhost4[1]][futureGhost4[0]] === 5) {
+      if (tempGrid[futureGhost4[1]][futureGhost4[0]] === GridTile.Pacman) {
         tempStatus = Status.Over;
         return {
           g1Previous: ghost1Previous,
@@ -395,7 +351,7 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
       } else {
         tempGrid[ghost4Y][ghost4X] = setPrevious(state, tempGrid, ghost4Previous, 4);
         ghost4Previous = tempGrid[futureGhost4[1]][futureGhost4[0]];
-        tempGrid[futureGhost4[1]][futureGhost4[0]] = 16;
+        tempGrid[futureGhost4[1]][futureGhost4[0]] = GridTile.Ghost4;
         ghost4X = futureGhost4[0];
         ghost4Y = futureGhost4[1];
       }
@@ -426,13 +382,13 @@ function generateGrid(state: IStoreState, keyPressCode: number) {
 
 function setPrevious(state: IStoreState, grid: number[][], previous: number, ghost: number): number {
   switch (previous) {
-    case 4:
+    case GridTile.Ghost1:
       return setPrevious(state, grid, state.ghost1Previous, 1);
-    case 8:
+    case GridTile.Ghost2:
       return setPrevious(state, grid, state.ghost2Previous, 2);
-    case 12:
+    case GridTile.Ghost3:
       return setPrevious(state, grid, state.ghost3Previous, 3);
-    case 16:
+    case GridTile.Ghost4:
       return setPrevious(state, grid, state.ghost4Previous, 4);
     default:
       switch (ghost) {
@@ -446,6 +402,6 @@ function setPrevious(state: IStoreState, grid: number[][], previous: number, gho
           return state.ghost4Previous;
       }
   }
-  return 3;
+  return GridTile.Ground;
 
 }
